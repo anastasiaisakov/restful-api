@@ -25,4 +25,10 @@ api.add_resource(StoreList, '/stores')
 if __name__ == '__main__': # so it doesn't run when importing app
     from db import db
     db.init_app(app)
-    app.run(port=5000, debug=True)
+
+    if app.config['DEBUG']:
+        @app.before_first_request
+        def create_tables():
+            db.create_all()
+
+    app.run(port=5000)
